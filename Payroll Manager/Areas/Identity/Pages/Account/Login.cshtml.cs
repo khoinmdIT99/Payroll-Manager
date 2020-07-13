@@ -95,7 +95,7 @@ namespace Payroll_Manager.Areas.Identity.Pages.Account
                     if (match != null)
                     {
                         returnUrl = Url.Content("~/Admin/Attendances/Index");
-                        _logger.LogInformation("User logged in to attendance.");
+                        _logger.LogInformation("User logged in");
                         return LocalRedirect(returnUrl);
                     }
                     _logger.LogInformation("User logged in.");
