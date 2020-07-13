@@ -1,0 +1,97 @@
+﻿@model Payroll_Manager.Areas.Admin.Models.VM_Document.ListViewModel
+@using Microsoft.AspNetCore.Identity
+@using Payroll_Manager.Utilities
+@using Payroll_Manager.Infrastructure
+@addTagHelper *, Payroll_Manager
+@inject UserManager<Payroll_Manager.Persistence.ApplicationUser> _userManager
+
+@{ ViewData["Title"] = "File công việc"; }
+@section Styles{
+    <link href="/css/purchase.css" rel="stylesheet" type="text/css" />
+}
+<div class="row" style="padding: 15px;">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <div class="card-title">File Công Việc</div>
+                @if (User.IsInRole(SD.Admin.ToString()))
+                {
+    <a asp-action="Create" class="btn mr-2 mb-2 btn-primary">
+        Tạo File Công việc
+    </a>}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Mã</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Thời gian tạo</th>
+                                <th scope="col">Thời gian kết thúc</th>
+                                <th scope="col">Lấy tài liệu</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var doc in Model.Documents)
+                            {
+                <tr>
+                    <td class="align-middle">
+                        @($"№ : {doc.Number} -Time: {doc.Date:dd.MM.yyyy}")
+                    </td>
+                    <td class="align-middle">
+                        @doc.Caption
+                        <br />
+                        <span class="badge badge-danger badge-pill" state-acq-for="@doc.Id"></span>
+                    </td>
+                    <td class="align-middle">
+                        @doc.CreatedAt
+                    </td>
+                    <td class="align-middle">
+                        @doc.SeeBefore
+                    </td>
+                    <td class="align-middle">
+                        <span class="badge badge-primary badge-pill" count-acq-for="@doc.Id">0</span>
+                    </td>
+                    <td class="align-middle">
+                        <a class="btn btn-info m-1" asp-action="Details" asp-route-id="@doc.Id">Chi tiết tài liệu</a>
+                        @if (User.IsInRole(SD.Admin.ToString()))
+                        {
+        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@doc.Id">Xóa tài liệu</a>}
+                    </td>
+                </tr>}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(".custom-file-input").on("change", function (e) {
+            let filenames = [];
+            let files = e.target.files;
+            if (files.length > 1) {
+                filenames.push("Выбрано (" + files.length + ")");
+            } else {
+                for (let i in files) {
+                    if (files.hasOwnProperty(i)) {
+                        filenames.push(files[i].name);
+                    }
+                }
+            }
+            $(this).siblings(".custom-file-label").addClass("selected").html(filenames.join(","));
+        });
+
+        $("#openList").click(function () {
+            $("#list").show();
+        });
+        $("#closeList").click(function () {
+            $("#list").hide();
+        });
+
+    </script>
+}
