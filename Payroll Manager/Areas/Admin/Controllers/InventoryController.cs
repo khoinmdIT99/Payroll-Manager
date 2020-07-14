@@ -20,6 +20,7 @@ using Payroll_Manager.Services;
 
 namespace Payroll_Manager.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
     public class InventoryController : Controller

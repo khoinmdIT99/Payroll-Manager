@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ using Payroll_Manager.Services;
 
 namespace Payroll_Manager.Areas.Admin.Controllers
 {
-
+    [Authorize]
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
     public class PurchaseOrdersController : Controller

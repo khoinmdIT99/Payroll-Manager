@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Payroll_Manager.Areas.Admin.Models;
 using Payroll_Manager.Areas.Admin.Models.VM_Document;
 using Payroll_Manager.Entity;
@@ -43,13 +44,22 @@ namespace Payroll_Manager.Areas.Admin.Controllers
             _logger = logger;
         }
 
-        public IActionResult List(int page = 1)
+        public async Task<IActionResult> List(int page = 1)
         {
+
+            var result = _dataAccess.Familiarization.FindAll().ToList();
+            var a = result.GroupBy(x => x.Employee)
+                .Select(y => new { Name = y.Key, Count = y.Count() });
+            var b = await GetCurrentUserAsync();
+            var employeeQuantity = _dataAccess.Familiarization.FindAll().Count(x => x.Employee == b.FullName);
+            var quantity = _dataAccess.Familiarization.FindAll().Count();
+            ViewBag.employeeRating = ((double)employeeQuantity / quantity ) * 100;
             ListViewModel model = new ListViewModel
             {
                 Documents = _dataAccess.Document.GetList()
             };
-            
+            var data = JsonConvert.SerializeObject(a);
+            ViewBag.DataPoints = data;
             return View(model);
         }
 
@@ -136,8 +146,13 @@ namespace Payroll_Manager.Areas.Admin.Controllers
             var a = await GetCurrentUserAsync();
 
             bool isFamiliarized = document.Familiarizations.Any(f => f.Employee == a.FullName);
-
-            return View(new DetailsViewModel{Document = document, СurrentUserIsFamiliarized = isFamiliarized || document.SeeBefore < DateTime.Now });
+            var check = document.Familiarizations.FirstOrDefault();
+            bool ketqua = check != null && a.FullName.Equals(check.Employee);
+            if (check != null)
+            {
+                return View(model: new DetailsViewModel { Document = document,Check = ketqua, СurrentUserIsFamiliarized = true || document.SeeBefore < DateTime.Now });
+            }
+            return View(model: new DetailsViewModel { Document = document, Check = false, СurrentUserIsFamiliarized = isFamiliarized || document.SeeBefore < DateTime.Now });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -90,7 +90,7 @@ namespace Payroll_Manager.Areas.Identity.Pages.Account
                 {
                     IList<string> rolename = _userManager.GetRolesAsync(data).Result.ToList();
                     var match = rolename
-                        .FirstOrDefault(stringToCheck => stringToCheck.Contains(SD.DepartmentHead.ToString()));
+                        .FirstOrDefault(stringToCheck => stringToCheck.Contains(SD.Payroll.ToString()));
 
                     if (match != null)
                     {

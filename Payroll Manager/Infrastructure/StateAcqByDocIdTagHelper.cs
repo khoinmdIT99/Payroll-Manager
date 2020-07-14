@@ -34,12 +34,24 @@ namespace Payroll_Manager.Infrastructure
 
             var a = await _userManager.GetUserAsync(_accessor.HttpContext.User);
 
-            bool isAcq = document.Familiarizations.Any(f => f.Employee == a.FullName);
+            //bool isAcq = document.Familiarizations.Any(f => f.Employee == a.FullName);
 
-            if (!isAcq)
-            {
-                output.Content.Append(document.SeeBefore > DateTime.Now ? "Ознакомиться" : "Просрочено!");
-            }
+            //if (!isAcq)
+            //{
+                if (document.Familiarizations.FirstOrDefault() != null)
+                {
+                    output.Content.Append("Đã nhận tài liệu");
+                }
+                else
+                {
+                    output.Content.Append(document.SeeBefore > DateTime.Now ? "Nhận tài liệu" : "Quá hạn!");
+                }
+
+            //}
+            //else
+            //{
+            //    output.Content.Append("Đã nhận tài liệu");
+            //}
         }
     }
 }

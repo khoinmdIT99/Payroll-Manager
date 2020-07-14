@@ -70,7 +70,7 @@
     <Folder Include="Areas\Admin\Views\Documents\" />
     <Folder Include="Areas\Admin\Views\File\" />
     <Folder Include="Areas\Admin\Views\Shared\Components\Search\" />
-    <Folder Include="Attachments\Storage\DOC000000000002\" />
+    <Folder Include="Attachments\Storage\" />
     <Folder Include="Extensions\" />
     <Folder Include="Files\" />
     <Folder Include="Hubs\" />

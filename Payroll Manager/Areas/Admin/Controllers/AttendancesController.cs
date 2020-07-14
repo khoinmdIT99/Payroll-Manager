@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Payroll_Manager.Areas.Admin.Models.VM_DoanhNghiep;
@@ -10,6 +11,7 @@ using Payroll_Manager.Persistence;
 
 namespace Payroll_Manager.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
     public class AttendancesController : Controller

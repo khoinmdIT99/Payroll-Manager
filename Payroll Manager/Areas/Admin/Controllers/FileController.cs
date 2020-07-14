@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using Payroll_Manager.Persistence;
 
 namespace Payroll_Manager.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
     public class FileController : Controller

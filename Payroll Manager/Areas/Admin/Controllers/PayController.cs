@@ -19,6 +19,7 @@ namespace Payroll_Manager.Areas.Admin.Controllers
     /* [Authorize(Roles = "Admin, Manager, Demo")]  */                                          // [Authorize(Roles = "Manager")] )the user has to be both
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
+    [Authorize]
     public class PayController : Controller
     {
         private readonly IPayComputationService _payComputationService;

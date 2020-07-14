@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Storage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Files>
-    <File Id="271f07a9-88ce-465a-bc09-c2a98dccfa40" Name="Bailam.xlsx" MimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
-    <File Id="1d01f3f7-caab-4554-a948-e943787416d8" Name="Bailam123.xlsx" MimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
-  </Files>
-</Storage>

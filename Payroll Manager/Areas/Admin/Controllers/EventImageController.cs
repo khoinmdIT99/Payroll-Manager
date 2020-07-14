@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +16,7 @@ using Payroll_Manager.Persistence;
 
 namespace Payroll_Manager.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
     public class EventImageController : Controller

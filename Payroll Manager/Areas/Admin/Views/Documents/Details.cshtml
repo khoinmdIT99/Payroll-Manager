@@ -8,7 +8,7 @@
     <div class="col-md-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
-                <div class="card-title">Chi tiết File: @ViewData["Title"] @($"№{Model.Document.Number} от {Model.Document.Date:dd.MM.yyyy} ({Model.Document.Caption})")</div>
+                <div class="card-title">Chi tiết File: @ViewData["Title"] @($"№ {Model.Document.Number} от {Model.Document.Date:dd.MM.yyyy} ({Model.Document.Caption})")</div>
 
                 @if (User.IsInRole(SD.Admin.ToString()))
                 {
@@ -28,7 +28,25 @@
                             Số File đăng:
                         </dt>
                         <dd class="col-sm-8">
-                            <ul document-id="@Model.Document.Id" item-class="p-0"></ul>
+                            @if(!Model.СurrentUserIsFamiliarized)
+                            {
+                                <ul document-id="@Model.Document.Id" item-class="p-0"></ul>
+ 
+                            }
+                            else
+                            {
+                                @if(User.IsInRole(SD.Admin.ToString()) || Model.Check)
+                                {
+                                    <ul document-id="@Model.Document.Id" item-class="p-0"></ul>
+                                }
+                                else
+                                {
+                                    @*@("Bạn không đủ quyền để xem")*@
+                                    @("Đã có người nhận tài liệu")
+                                }
+
+                            }
+
                         </dd>
                         @if (User.IsInRole(SD.Admin.ToString()))
                         {
@@ -52,7 +70,7 @@
                 </div>
             </div>
                 <div class="card-footer">
-                    <button type="button" data-toggle="collapse" href="#collapseExample123" class="btn btn-primary">Hiện Chi tiết công việc</button>
+                    <button type="button" data-toggle="collapse" href="#collapseExample123" class="btn btn-primary">Xem chi tiết</button>
                 </div>
 
 
@@ -79,10 +97,10 @@
 @section Scripts {
     <script>
     $(".custom-file-input").on("change", function (e) {
-            let filenames = [];
-            let files = e.target.files;
+            var filenames = [];
+            var files = e.target.files;
             if (files.length > 1) {
-                filenames.push("Выбрано (" + files.length + ")");
+                filenames.push("Đã chọn (" + files.length + ")");
             } else {
                 for (let i in files) {
                     if (files.hasOwnProperty(i)) {

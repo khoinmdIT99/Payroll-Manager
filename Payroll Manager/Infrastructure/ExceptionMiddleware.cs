@@ -25,7 +25,7 @@ namespace Payroll_Manager.Infrastructure
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Произошла ошибка: {ex}");
+                _logger.LogError($"An error has occurred: {ex}");
                 await HandleExceptionAsync(httpContext, ex);
             }
         }

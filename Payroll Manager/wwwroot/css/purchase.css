@@ -437,3 +437,14 @@ h2, .h2 {
     -webkit-box-shadow: 0px 0px 13px 0px rgba(241, 100, 108, 0.05);
     box-shadow: 0px 0px 13px 0px rgba(241, 100, 108, 0.05);
 }
+.apexcharts-canvas {
+    position: relative;
+    user-select: none;
+}
+.apex-charts {
+    min-height: 10px !important;
+}
+.chart-demo {
+    height: 370px;
+    margin: 20px auto;
+}

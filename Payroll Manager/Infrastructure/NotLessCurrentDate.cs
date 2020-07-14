@@ -14,7 +14,7 @@ namespace Payroll_Manager.Infrastructure
                 if (dateTime > DateTime.Now)
                     return true;
                 else
-                    ErrorMessage = "Установленная дата не может быть меньше текущей";
+                    ErrorMessage = "The set date cannot be less than the current";
             }
             return false;
         }

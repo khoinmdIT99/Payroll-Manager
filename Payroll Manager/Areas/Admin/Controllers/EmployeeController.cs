@@ -20,7 +20,7 @@ using static Payroll_Manager.Areas.Admin.Models.CachingExtensions;
 namespace Payroll_Manager.Areas.Admin.Controllers
 {
     // [Authorize]  
-
+    [Authorize]
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
     public class EmployeeController : Controller
