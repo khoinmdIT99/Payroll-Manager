@@ -64,8 +64,8 @@
                             </a>
                         </li>
                         <li class="btn-group nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-link-icon fa fa-edit"></i> Projects
+                            <a asp-controller="Chat" asp-action="Index" asp-area="Admin" class="nav-link">
+                                <i class="nav-link-icon fa fa-edit"></i> Chat
                             </a>
                         </li>
                         <li class="dropdown nav-item">
@@ -140,6 +140,8 @@
 <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
 <script type="text/javascript" src="~/lib/jquery-validation/dist/additional-methods.js" asp-append-version="true"></script>
 <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script type="text/javascript" src="~/lib/microsoft/signalr/dist/browser/signalr.js" asp-append-version="true"></script>
+<script src="~/js/chat.js"></script>
 @RenderSection("Scripts", required: false)
 </body>
 

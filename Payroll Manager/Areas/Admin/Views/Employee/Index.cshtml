@@ -2,7 +2,7 @@
 @model Payroll_Manager.Areas.Admin.EmployeeListPagination<Payroll_Manager.Areas.Admin.Models.VM_Employee.EmployeeIndexViewModel>
 @*Dont need to add full name as it can be found in _ViewImports.cshtml*@
 
-@{ ViewBag.Title = "Employee";}
+@{ ViewData["Title"] = "Nhân viên"; }
 @{
     var getlist = ViewBag.List as IEnumerable<EmployeeIndexViewModel>;
 }
@@ -41,20 +41,20 @@
                                         @foreach (var plan in getlist.GroupBy(p => p.department.Name))
                                         {
                                             <thead class="thead-light">
-                                            <tr role="row">
-                                                <th class="border-top-0 sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="2" aria-label="Time: activate to sort column ascending">
-                                                    @plan.Key
-                                                </th>
-                                            </tr>
+                                                <tr role="row">
+                                                    <th class="border-top-0 sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="2" aria-label="Time: activate to sort column ascending">
+                                                        @plan.Key
+                                                    </th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach (var plan1 in plan)
-                                            {
-                                                <tr>
-                                                    <td >@plan1.FullName</td>
-                                                    <td>@plan1.EmployeeNo</td>
-                                                </tr>
-                                            }
+                                                @foreach (var plan1 in plan)
+                                                {
+                                                    <tr>
+                                                        <td>@plan1.FullName</td>
+                                                        <td>@plan1.EmployeeNo</td>
+                                                    </tr>
+                                                }
                                             </tbody>
                                             <tfoot>
 

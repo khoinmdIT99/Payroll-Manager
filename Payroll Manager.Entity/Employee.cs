@@ -43,7 +43,7 @@ namespace Payroll_Manager.Entity
         public Boolean Temporary_status { get; set; }
         public ICollection<Attendance> Attendance { get; set; }
         [NotMapped]
-        public string DropdownStr => FullName + " [Chức vụ: " + Designation.ToString() + "]";
+        public string DropdownStr => FullName + " [Mã nhân viên: " + NationalInsuranceNo.ToString() + "]";
         public IEnumerable<PaymentRecord> PaymentRecords { get; set; }
 
 

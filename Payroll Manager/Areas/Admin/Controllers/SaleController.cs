@@ -27,11 +27,11 @@ namespace Payroll_Manager.Areas.Admin.Controllers
         private readonly ICustomerService iCustomerService;
         private readonly IEmployeeService iEmployeeService; 
         private readonly UserManager<ApplicationUser> _userManager;
-        private ICacheProvider _cache;
+        //private ICacheProvider _cache;
         private DateTime _lastUpdated;
 
 
-        public SaleController(ISaleService iSaleService, ISaleItem iSaleItem, ICustomerService iCustomerService, IEmployeeService iEmployeeService, UserManager<ApplicationUser> userManager, IInventoryService inventoryService, ICacheProvider cache)
+        public SaleController(ISaleService iSaleService, ISaleItem iSaleItem, ICustomerService iCustomerService, IEmployeeService iEmployeeService, UserManager<ApplicationUser> userManager, IInventoryService inventoryService)
         {
             this.iSaleService = iSaleService;
             this.iSaleItem = iSaleItem;
@@ -39,8 +39,6 @@ namespace Payroll_Manager.Areas.Admin.Controllers
             this.iEmployeeService = iEmployeeService;
             _userManager = userManager;
             this.inventoryService = inventoryService;
-            _cache = cache;
-            _lastUpdated = DateTime.Now;
 
         }
         public class SoWithItems
@@ -126,7 +124,8 @@ namespace Payroll_Manager.Areas.Admin.Controllers
             return "RETURNED";
 
         }
-
+        [HttpGet]
+        [ResponseCache(VaryByHeader = "option;search", Duration = 30)]
         public IActionResult TransactionLookup(string option, string search)
         {
             List<SoWithItems> soListComplete = new List<SoWithItems>();
@@ -154,21 +153,21 @@ namespace Payroll_Manager.Areas.Admin.Controllers
                 variable.S.TenNhanVien = iEmployeeService.GetById(variable.S.EmployeeId).FullName;
                 variable.S.TenKhachHang = iCustomerService.GetById((int)variable.S.CustomerId).FullName;
             }
-            string cacheKey = "Searchfields";
-            bool cacheExists = _cache.TryGetItem(cacheKey, _lastUpdated, out List<SoWithItems> fields);
-            if (!cacheExists)
-            {
-                fields = soListComplete;
-                _cache.AddItem(cacheKey, _lastUpdated, fields);
-            }
+            //string cacheKey = "Searchfields";
+            //bool cacheExists = _cache.TryGetItem(cacheKey, _lastUpdated, out List<SoWithItems> fields);
+            //if (!cacheExists)
+            //{
+            //    fields = soListComplete;
+            //    _cache.AddItem(cacheKey, _lastUpdated, fields);
+            //}
 
             if (option == "Tên nhân viên")
             {
                 if (search == null)
                 {
-                    return View(fields.OrderByDescending(x => x.S.SaleDateString).ThenBy(q => q.S.price).ThenBy(m => m.S.items).Take(15).ToList());
+                    return View(soListComplete.OrderByDescending(x => x.S.SaleDateString).ThenBy(q => q.S.price).ThenBy(m => m.S.items).Take(15).ToList());
                 }
-                var searchcus = fields.Where(x => x.S.TenNhanVien.ToLower().ToString().Contains(search.ToLower())).ToList();
+                var searchcus = soListComplete.Where(x => x.S.TenNhanVien.ToLower().ToString().Contains(search.ToLower())).ToList();
                 if (searchcus.Count == 0)
                 {
                     return View(new List<SoWithItems>());
@@ -180,10 +179,10 @@ namespace Payroll_Manager.Areas.Admin.Controllers
             {
                 if(search == null)
                 {
-                    return View(fields.OrderByDescending(x => x.S.SaleDateString).ThenBy(q => q.S.price).ThenBy(m => m.S.items).Take(15).ToList());
+                    return View(soListComplete.OrderByDescending(x => x.S.SaleDateString).ThenBy(q => q.S.price).ThenBy(m => m.S.items).Take(15).ToList());
                 }
 
-                var searchcus = fields.Where(x => x.S.TenKhachHang.ToLower().ToString().Contains(search.ToLower())).ToList();
+                var searchcus = soListComplete.Where(x => x.S.TenKhachHang.ToLower().ToString().Contains(search.ToLower())).ToList();
                 if (searchcus.Count != 0)
                 {
                     return View(searchcus);
@@ -192,7 +191,7 @@ namespace Payroll_Manager.Areas.Admin.Controllers
             }
             else
             {
-                return View(fields.OrderByDescending(x => x.S.SaleDateString).ThenBy(q => q.S.price).ThenBy(m => m.S.items).Take(15).ToList());
+                return View(soListComplete.OrderByDescending(x => x.S.SaleDateString).ThenBy(q => q.S.price).ThenBy(m => m.S.items).Take(15).ToList());
             }
         }
 
@@ -217,7 +216,7 @@ namespace Payroll_Manager.Areas.Admin.Controllers
         public IActionResult NewSale()
         {
             ViewBag.CustomerID = new SelectList(iCustomerService.GetCustomers(), "CustomerId", "FullName");
-            ViewBag.EmployeeID = new SelectList(iEmployeeService.GetEmployees().Where(x => !x.Designation.Contains("Speaker")), "Id", "DropdownStr");
+            ViewBag.EmployeeID = new SelectList(iEmployeeService.GetEmployees().Include(x => x.Department).Where(x => !x.Department.Name.Contains("Diễn giả")), "Id", "DropdownStr");
             var model = new SaleCreateViewModel();
             return View(model);
         }

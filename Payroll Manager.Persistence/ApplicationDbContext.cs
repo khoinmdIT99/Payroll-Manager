@@ -32,6 +32,8 @@ namespace Payroll_Manager.Persistence
         public DbSet<Attendance> Attendance { get; set; }
         public DbSet<FileOnDatabaseModel> FilesOnDatabase { get; set; }
         public DbSet<FileOnFileSystemModel> FilesOnFileSystem { get; set; }
+        public virtual DbSet<Chat> Chat { get; set; }
+        public virtual DbSet<OnlineList> OnlineList { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

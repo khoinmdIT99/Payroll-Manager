@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
+using Payroll_Manager.Areas.Admin.Models;
 using Payroll_Manager.Areas.Admin.Models.VM_Inventory;
 using Payroll_Manager.Entity;
 using Payroll_Manager.Entity.ModelForUser;
@@ -31,8 +34,13 @@ namespace Payroll_Manager.Areas.Admin.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHubContext<AuctionHub> _auctionHub;
         private readonly ApplicationDbContext _context;
+        public static readonly string SearchResult = "SearchResult";
+        private readonly ILogger<InventoryController> _logger;
+        private readonly IGoogleSearchService _googleSearchService;
+        private readonly IBingSearchService _bingSearchService;
+        private readonly IMemoryCache _memoryCache;
 
-        public InventoryController(IInventoryService service, IWebHostEnvironment hostingService, ICategoryService categoryService, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IHubContext<AuctionHub> auctionHub)
+        public InventoryController(IInventoryService service, IWebHostEnvironment hostingService, ICategoryService categoryService, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IHubContext<AuctionHub> auctionHub, ILogger<InventoryController> logger, IGoogleSearchService googleSearchService, IBingSearchService bingSearchService, IMemoryCache memoryCache)
         {
             _inventoryService = service;
             _hostingEnvironmentServices = hostingService;
@@ -40,6 +48,10 @@ namespace Payroll_Manager.Areas.Admin.Controllers
             _userManager = userManager;
             _context = context;
             _auctionHub = auctionHub;
+            _logger = logger;
+            _googleSearchService = googleSearchService;
+            _bingSearchService = bingSearchService;
+            _memoryCache = memoryCache;
         }
         private bool _disposed = false;
 
@@ -61,7 +73,42 @@ namespace Payroll_Manager.Areas.Admin.Controllers
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        [HttpGet]
+        public IActionResult Get()
+        {
+            _logger.LogInformation(1, $"Getting Statistic");
+
+            return View("Get");
+        }
+
+        [HttpGet]
+        [Route("/{keywords}/{tagurl}")]
+        public async Task<IActionResult> Get(string keywords, string tagurl)
+        {
+            _logger.LogInformation(1, $"Getting Statistic");
+            var response = new List<SearchResult>();
+            try
+            {
+                if (_memoryCache.TryGetValue(SearchResult, out List<SearchResult> cacheEntry))
+                {
+                    response = cacheEntry;
+                }
+                else
+                {
+                    response.Add(await _googleSearchService.Search(keywords, tagurl));
+                    response.Add(await _bingSearchService.Search(keywords, tagurl));
+                    var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(30));
+                    _memoryCache.Set(SearchResult, response, cacheEntryOptions);
+                }
+            }
+            catch (Exception ex)
+            {
+                BadRequest(ex.Message);
+            }
+            return Ok(response);
+        }
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public IActionResult Index()
         {
             IEnumerable<Inventory> adds = _inventoryService.GetAll();

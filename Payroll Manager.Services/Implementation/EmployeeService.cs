@@ -38,7 +38,7 @@ namespace Payroll_Manager.Services.Implementation
             await _context.SaveChangesAsync();
         }
                                                      // AsNoTracking is an entity performance technique.
-        public IEnumerable<Employee> GetAll() =>_context.Employees.AsNoTracking().OrderBy(emp => emp.DateJoined).Include(e => e.Address);
+        public IEnumerable<Employee> GetAll() =>_context.Employees.AsNoTracking().OrderBy(emp => emp.DateJoined).Include(e => e.Address).Include(e => e.Department);
         public IEnumerable<Employee> GetAllSearch(string searchid) => _context.Employees.AsNoTracking().OrderBy(emp => emp.EmployeeNo).Where(o => o.FullName.StartsWith(searchid) || o.EmployeeNo.StartsWith(searchid)).Include(k => k.Address);
         public Employee GetById(int employeeId) => _context.Employees.FirstOrDefault(e => e.Id == employeeId);
 

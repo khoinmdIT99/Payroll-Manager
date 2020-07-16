@@ -1,5 +1,5 @@
 ﻿@model Payroll_Manager.Areas.Admin.Models.VM_Employee.EmployeeEditViewModel
-
+@{ ViewData["Title"] = "Nhân viên"; }
 <link href="/css/Animated.css" rel="stylesheet" type="text/css" />
 <link href="/css/Employee.css" rel="stylesheet" type="text/css" />
 <div class="col-md-12 grid-margin stretch-card">
@@ -15,15 +15,15 @@
             <form method="post" enctype="multipart/form-data" asp-area="Admin" asp-controller="Employee" asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <input asp-for="Id" class="form-control" type="hidden"/>
-                    <input asp-for="ImageCu" class="form-control" type="hidden"/>
+                    <input asp-for="Id" class="form-control" type="hidden" />
+                    <input asp-for="ImageCu" class="form-control" type="hidden" />
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
                         <label id="title4" asp-for="EmployeeNo"></label>
                     </div>
                     <div class="form-group col-md-3">
-                        <input asp-for="EmployeeNo" class="form-control" readonly="true"/>
+                        <input asp-for="EmployeeNo" class="form-control" readonly="true" />
                         <span asp-validation-for="EmployeeNo" class="text-danger"></span>
                     </div>
                     <div class="col-md-2"></div>
@@ -31,7 +31,7 @@
                         <label id="title4" asp-for="DateJoined"></label>
                     </div>
                     <div class="form-group col-md-3">
-                        <input asp-for="DateJoined" class="form-control"  />
+                        <input asp-for="DateJoined" class="form-control" />
                         <span asp-validation-for="DateJoined" class="text-danger"></span>
                     </div>
                 </div>
@@ -40,11 +40,11 @@
                         <label id="title4" asp-for="FirstName"></label>
                     </div>
                     <div class="form-group col-md-3">
-                        <input asp-for="FirstName" class="form-control" placeholder="Enter First Name.."  />
+                        <input asp-for="FirstName" class="form-control" placeholder="Enter First Name.." />
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="col-md-2">
-                        <input asp-for="MiddleName" class="form-control" placeholder="Enter Middle Name.."  />
+                        <input asp-for="MiddleName" class="form-control" placeholder="Enter Middle Name.." />
                         <span asp-validation-for="MiddleName" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-2">

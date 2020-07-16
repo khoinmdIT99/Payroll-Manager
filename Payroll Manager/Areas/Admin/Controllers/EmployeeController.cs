@@ -15,28 +15,34 @@ using Payroll_Manager.Services;
 using Payroll_Manager.Areas.Admin.Models;
 using Payroll_Manager.Areas.Admin.Models.VM_Employee;
 using Payroll_Manager.Persistence;
+using Payroll_Manager.Utilities;
 using static Payroll_Manager.Areas.Admin.Models.CachingExtensions;
+
 
 namespace Payroll_Manager.Areas.Admin.Controllers
 {
     // [Authorize]  
     [Authorize]
+    [Authorize(Roles = SD.Admin + "," + SD.DepartmentHead + "," + SD.Hr)]
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
     public class EmployeeController : Controller
     {
+        private readonly IMemoryCache _cache;
         private readonly IEmployeeService _employeeService;
         private readonly IAddressService _addressService;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ApplicationDbContext _context;
 
-        public EmployeeController(IEmployeeService employeeService, IAddressService addressService, IWebHostEnvironment hostingEnvironment, ApplicationDbContext context)
+        public EmployeeController(IEmployeeService employeeService, IAddressService addressService, IWebHostEnvironment hostingEnvironment, ApplicationDbContext context, IMemoryCache cache)
         {
             _employeeService = employeeService;
             _addressService = addressService;
             _hostingEnvironment = hostingEnvironment;
             _context = context;
+            _cache = cache;
         }
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public IActionResult Index(int? pageNumber)
         {
             var employees = _employeeService.GetAll().Select(employee => new EmployeeIndexViewModel
@@ -58,9 +64,20 @@ namespace Payroll_Manager.Areas.Admin.Controllers
             ViewBag.List = employees;
             return View(EmployeeListPagination<EmployeeIndexViewModel>.Create(employees, pageNumber ?? 1, pageSize));
         }
-        public IActionResult SearchView(int? pageNumber, string searchid)
+        private async Task<string> GetSearchResult(string textInput)
         {
-            var employees = _employeeService.GetAllSearch(searchid).Select(employee => new EmployeeIndexViewModel
+            return await _cache.GetOrCreateAsync($"TenNhanVien-{textInput}", result =>
+            {
+                result.SlidingExpiration = TimeSpan.FromMinutes(1);
+                Console.WriteLine("Not cached, creating response.");
+                return Task.FromResult(textInput);
+            });
+        }
+
+        public async Task<IActionResult> SearchView(int? pageNumber, string searchid)
+        {
+            var result = await GetSearchResult(searchid);
+            var employees = _employeeService.GetAllSearch(result).Select(employee => new EmployeeIndexViewModel
             {
                 Id = employee.Id,
                 AddressId = employee.AddressId,
@@ -246,7 +263,7 @@ namespace Payroll_Manager.Areas.Admin.Controllers
             ViewBag.Addresses = _addressService.GetAllAddress();
             return View();
         }
-
+        [ResponseCache(Duration = 120)]
         public IActionResult Detail(int id)
         {
             var employee = _employeeService.GetById(id);

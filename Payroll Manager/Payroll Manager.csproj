@@ -65,6 +65,7 @@
     <Folder Include="Areas\Admin\Views\Account\" />
     <Folder Include="Areas\Admin\Views\Adminstrator\" />
     <Folder Include="Areas\Admin\Views\Attendances\" />
+    <Folder Include="Areas\Admin\Views\Chat\" />
     <Folder Include="Areas\Admin\Views\Company\" />
     <Folder Include="Areas\Admin\Views\Department\" />
     <Folder Include="Areas\Admin\Views\Documents\" />
@@ -73,7 +74,6 @@
     <Folder Include="Attachments\Storage\" />
     <Folder Include="Extensions\" />
     <Folder Include="Files\" />
-    <Folder Include="Hubs\" />
     <Folder Include="StartupTasks\" />
     <Folder Include="Storage\" />
     <Folder Include="Views\Shared\Components\EventDetail\" />
@@ -125,6 +125,7 @@
     <None Include="Areas\Admin\Views\Attendances\Delete.cshtml" />
     <None Include="Areas\Admin\Views\Attendances\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Attendances\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Chat\Index.cshtml" />
     <None Include="Areas\Admin\Views\Company\Create.cshtml" />
     <None Include="Areas\Admin\Views\Company\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Company\List.cshtml" />

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Payroll_Manager.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -158,9 +159,13 @@ namespace Payroll_Manager
                     .AllowCredentials();
             }));
             services.AddFileStorage("Attachments");
-            services.AddSingleton<ICacheProvider, CacheProvider>(_ => new CacheProvider(_loggerFactory));
+            //services.AddSingleton<ICacheProvider, CacheProvider>(_ => new CacheProvider(_loggerFactory));
             int cacheSize = int.Parse("100");
-            services.AddSingleton(new RotatingCache<List<String>>(cacheSize));
+            //services.AddSingleton(new RotatingCache<List<String>>(cacheSize));
+            services.AddResponseCaching();
+            services.AddHttpClient<IGoogleSearchService, GoogleSearchService>();
+            services.AddHttpClient<IBingSearchService, BingSearchService>();
+            services.AddSingleton<MemoryCache>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -201,7 +206,7 @@ namespace Payroll_Manager
             app.UseStaticFiles();
             app.UseSession();
             app.UseCookiePolicy();
-
+            app.UseResponseCaching();
             app.UseRouting();
 
             app.UseAuthentication();
@@ -217,6 +222,7 @@ namespace Payroll_Manager
                 endpoints.MapAreaControllerRoute(name: "areas", "areas", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
                 endpoints.MapHub<AuctionHub>("/auction");
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }

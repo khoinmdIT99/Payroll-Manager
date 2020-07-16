@@ -1,4 +1,7 @@
 ﻿@model Payroll_Manager.Areas.Admin.Controllers.PurchaseOrdersController.PoWithItems
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
 <link href="/css/purchase.css" rel="stylesheet" type="text/css" />
 <div class="purchase">
     <div class="row" style="padding: 10px">
@@ -11,7 +14,7 @@
                             <ul class="list-unstyled text-center text-muted mb-0">
                                 <li class="list-inline-item font-13"><i class="mdi mdi-album font-16 text-purple mr-4"></i>Mã giao dịch: @Html.DisplayFor(model => model.PurchaseOrder.MaGiaoDich)</li>
                                 <li class="list-inline-item font-13"><i class="mdi mdi-album font-16 text-pink mr-2"></i>Ngày giao dịch: @Html.DisplayFor(model => model.PurchaseOrder.DateStr)</li>
-                                <li class="list-inline-item font-13"><i class="mdi mdi-album font-16 text-success mr-2"></i>Tổng tiền: @Html.DisplayFor(model => model.PurchaseOrder.TotalPrice)</li>
+                                <li class="list-inline-item font-13"><i class="mdi mdi-album font-16 text-success mr-2"></i>Tổng tiền: @Model.PurchaseOrder.TotalPrice.ToString("N0") VNĐ</li>
                                 <li class="list-inline-item font-13">
                                     <i class="mdi mdi-album font-16 text-success mr-2">
                                         Số lượng bán: @Html.DisplayFor(model => model.PurchaseOrder.SLBan)
@@ -82,13 +85,14 @@
                                                 @Html.DisplayFor(modelItem => item.Inventory.Name)
                                             </td>
                                             <td class="StockAsk">
-                                                @Html.DisplayFor(modelItem => item.Inventory.NetPrice)
+                                                @String.Format(info, "{0:c}", item.Inventory.NetPrice)
                                             </td>
                                             <td class="StockQuantity">
                                                 @Html.DisplayFor(modelItem => item.Quantity)
                                             </td>
                                             <td class="StockPrice">
-                                                @Html.DisplayFor(modelItem => item.TotalPrice)
+                                                @String.Format(info, "{0:c}", item.TotalPrice)
+
                                             </td>
 
                                             <td class="border-top-0">

@@ -1,4 +1,5 @@
 ﻿@model Payroll_Manager.Areas.Admin.Models.VM_Employee.EmployeeCreateViewModel
+@{ ViewData["Title"] = "Nhân viên"; }
 <link href="/css/Animated.css" rel="stylesheet" type="text/css" />
 <link href="/css/Employee.css" rel="stylesheet" type="text/css" />
 <div class="animated fadeIn employee">
@@ -205,5 +206,5 @@
     }
 </script>
 @section Scripts{
-@{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

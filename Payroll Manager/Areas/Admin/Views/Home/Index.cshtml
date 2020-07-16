@@ -22,6 +22,12 @@
         <small>Đồng hồ:</small>
         <div class="font-weight-bold" id="current-time" style="font-size: 2.0rem;"></div>
     </div>
+@if (User.IsInRole(SD.Hr.ToString()) || User.IsInRole(SD.Admin.ToString()) || User.IsInRole(SD.DepartmentHead.ToString()))
+{
+    <button style="padding: 10px; margin: 10px;" onclick="location.href = '@Url.Action("Index", "Attendances", new {Area = "Admin"})'" class="mb-2 mr-2 btn btn-primary btn-lg btn-block">
+        Đi tới điểm danh
+    </button>
+}
 </div>
 @if (User.IsInRole(SD.Hr.ToString()) || User.IsInRole(SD.Admin.ToString()))
 {

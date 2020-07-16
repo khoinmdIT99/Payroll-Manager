@@ -99,6 +99,7 @@ namespace Payroll_Manager.Areas.Admin.Controllers
         }
 
         // GET: Customers/Details/5
+        [ResponseCache(Duration = 120)]
         public IActionResult Details(int id)
         {
             if (User.FindFirstValue(ClaimTypes.NameIdentifier) == null)

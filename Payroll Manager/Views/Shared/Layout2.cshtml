@@ -177,7 +177,7 @@ Footer
                 url: "@Url.Action("AddEmailTest", "User")",
                 type: "post",
                 data: obj,
-                beforeSend: function () { alert("Đợi hệ thống gửi đến email của bạn"); },
+                beforeSend: function () { alert("Hệ thống kiểm tra đang hoạt động"); },
                 success: function (result) {
                     if (result.name === "True") {
                         alert("Kiểm tra lại email");
