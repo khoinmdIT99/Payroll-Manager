@@ -1,4 +1,6 @@
 ﻿@model Payroll_Manager.Areas.Admin.Controllers.SaleController.SoWithItems
+@using Payroll_Manager.Utilities
+@inject UserManager<Payroll_Manager.Persistence.ApplicationUser> _userManager
 <link href="/css/purchase.css" rel="stylesheet" type="text/css" />
 <div class="page-content purchase">
 <div class="container-fluid">
@@ -94,12 +96,21 @@
                                             @Html.DisplayFor(modelItem => item.TotalSiPrice)
                                         </td>
                                         <td>
+                                        @if (User.IsInRole(SD.Admin.ToString()) || User.IsInRole(SD.DepartmentHead.ToString()))
+                                        {
                                             @if (item.Returned != 1)
-                                            {@Html.ActionLink("Trả sản phẩm", "Return", "SaleItem", new { id = item.SaleItemId }, new { @class = "btn btn-outline-primary px-3" })}
+                                            {
+                                                @Html.ActionLink("Trả sản phẩm", "Return", "SaleItem", new {id = item.SaleItemId}, new {@class = "btn btn-outline-primary px-3"})
+                                            }
                                             @if (item.Returned == 1)
                                             {
                                                 <span class="badge badge-md badge-soft-danger">Returned</span>
                                             }
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-md badge-soft-danger">Access denied</span>
+                                        }
 
                                         </td>
                                     </tr>
@@ -119,11 +130,16 @@
                     <div class="card-body">
                         <h4 class="header-title mt-0 mb-3">Tool</h4>
                         <p>
+                        @if (User.IsInRole(SD.Admin.ToString()) || User.IsInRole(SD.DepartmentHead.ToString()))
+                        {
                             @if (@ViewBag.HoatDong.Equals("0"))
-                            {@Html.ActionLink("Return Transaction", "ReturnTransaction", new { id = Model.S.SaleId }, new { @class = "btn btn-outline-danger px-3" })}
+                            {
+                                @Html.ActionLink("Xóa bỏ giao dịch", "ReturnTransaction", new {id = Model.S.SaleId}, new {@class = "btn btn-outline-danger px-3"})
+                            }
+                        }
                         </p>
                         <p>
-                            @Html.ActionLink("Back to Lookup", "TransactionLookup","Sale",null, new { @class = "btn btn-outline-primary px-3" })
+                            @Html.ActionLink("Trở về", "TransactionLookup","Sale",null, new { @class = "btn btn-outline-primary px-3" })
                         </p>
                         <p>
                             @Html.ActionLink("Cancel", "Index","Sale",null, new { @class = "btn btn-outline-success px-3" })

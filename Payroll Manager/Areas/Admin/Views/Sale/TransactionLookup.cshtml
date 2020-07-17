@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<Payroll_Manager.Areas.Admin.Controllers.SaleController.SoWithItems>
-@{ /**/
+@using Payroll_Manager.Utilities
+@inject UserManager<Payroll_Manager.Persistence.ApplicationUser> _userManager
+@{
 
-                ViewBag.Title = "TransactionLookup"; }
+    ViewBag.Title = "Tìm kiếm giao dịch";
+}
 
 <environment names="Development,Staging,Production">
     <link href="~/css/Animated.css" rel="stylesheet" type="text/css" />
@@ -34,13 +37,13 @@
                                 </div>
                                 @using (Html.BeginForm("TransactionLookup", "Sale", FormMethod.Get))
                                 {
-                            <b>Lựa chọn tìm kiếm: </b><p style="margin-left: 5px;"></p>
-                                            @Html.RadioButton("option", "Tên nhân viên")<text>&nbspTên nhân viên</text><p style="margin-left: 5px;"></p>
-                                                            @Html.RadioButton("option", "Tên khách hàng")<text>&nbspTên khách hàng</text><p style="margin-left: 5px;"></p>
-                                                                            @Html.TextBox("search")
-                                                                                            <input type="submit"
-                                                                                                   name="submit"
-                                                                                                   value="Search" style="padding: 10px" class="btn btn-outline-white" />}
+                    <b>Lựa chọn tìm kiếm: </b><p style="margin-left: 5px;"></p>
+                                    @Html.RadioButton("option", "Tên nhân viên")<text>&nbspTên nhân viên</text><p style="margin-left: 5px;"></p>
+                                                    @Html.RadioButton("option", "Tên khách hàng")<text>&nbspTên khách hàng</text><p style="margin-left: 5px;"></p>
+                                                                    @Html.TextBox("search")
+                                                                                    <input type="submit"
+                                                                                           name="submit"
+                                                                                           value="Search" style="padding: 10px" class="btn btn-outline-white" />}
                                 <table id="datatable" class="table table-bordered dataTable no-footer" role="grid" aria-describedby="datatable_info">
                                     <thead class="thead-light">
                                         <tr role="row">
@@ -62,50 +65,54 @@
                                 <td colspan="8">
                                     No data
                                 </td>
-                            </tr> }
-                                        else
-                                        {
-                            @foreach (var item in Model)
-                            {
+                            </tr>
+ }
+                        else
+                        {
+            @foreach (var item in Model)
+            {
 
-                            <tr role="row" class="odd">
-                                <td class="sorting_1">
-                                    @i
-                                </td>
-                                <td>
-                                    @item.S.TenKhachHang
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.S.TenNhanVien)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.S.SaleDateString)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.S.items)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.S.price)
-                                </td>
-                                <td>
-                                    @if (item.S.HoatDong.Contains("RET"))
-                                    {
-                                        <span class="badge badge-danger">@item.S.HoatDong</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge badge-success">@item.S.HoatDong</span>}
-                                </td>
-                                <td>
-                                    <a style="margin-left: 8px" class="text-success" asp-action="Details" asp-route-id="@item.S.SaleId">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <a class="text-danger" asp-action="Delete" asp-route-id="@item.S.SaleId">
-                                        <i class="far fa-trash-alt"></i> Delete
-                                    </a>
-                                </td>
-                            </tr>i++;
-                                            }}
+<tr role="row" class="odd">
+    <td class="sorting_1">
+        @i
+    </td>
+    <td>
+        @item.S.TenKhachHang
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.S.TenNhanVien)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.S.SaleDateString)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.S.items)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.S.price)
+    </td>
+    <td>
+        @if (item.S.HoatDong.Contains("RET"))
+        {
+<span class="badge badge-danger">@item.S.HoatDong</span> }
+                    else
+                    {
+<span class="badge badge-success">@item.S.HoatDong</span>}
+    </td>
+    <td>
+        <a style="margin-left: 8px" class="text-success" asp-action="Details" asp-route-id="@item.S.SaleId">
+            <i class="fas fa-edit"></i> Xem 
+        </a>
+    @if (User.IsInRole(SD.Admin.ToString()) || User.IsInRole(SD.DepartmentHead.ToString()))
+    {
+        <a class="text-danger" asp-action="Cancel" asp-route-id="@item.S.SaleId">
+            <i class="far fa-trash-alt"></i> Xóa
+        </a>
+    }
+    </td>
+</tr>
+i++;
+}}
                                     </tbody>
                                 </table>
                                 <br />

@@ -200,7 +200,7 @@
                 </ul>
             </li>
         }
-        @if (User.IsInRole(SD.Admin.ToString()) || User.IsInRole(SD.DepartmentHead.ToString()))
+        @if (User.IsInRole(SD.Admin.ToString()) || User.IsInRole(SD.DepartmentHead.ToString()) || User.IsInRole(SD.Worker.ToString()))
         {
             <li class="app-sidebar__heading">Giao dịch Online và Offline</li>
             <li>
@@ -209,24 +209,30 @@
                     <i class="metismenu-state-icon fas fa-angle-down caret-left"></i>
                 </a>
                 <ul>
-                    <li>
-                        <a asp-controller="Categories" asp-action="Index">
-                            <i class="metismenu-icon">
-                            </i> Loại
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Inventory" asp-action="Products">
-                            <i class="metismenu-icon">
-                            </i> Quản lý sản phẩm (Event)
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="PurchaseOrders" asp-action="PurchaseOrderHome">
-                            <i class="metismenu-icon">
-                            </i> Giao dịch chi trả
-                        </a>
-                    </li>
+                    @if (User.IsInRole(SD.Admin.ToString()) || User.IsInRole(SD.DepartmentHead.ToString()))
+                    {
+                        <li>
+                            <a asp-controller="Categories" asp-action="Index">
+                                <i class="metismenu-icon">
+                                </i> Loại
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Inventory" asp-action="Products">
+                                <i class="metismenu-icon">
+                                </i> Quản lý sản phẩm (Event)
+                            </a>
+                        </li>
+                    }
+                    @if (User.IsInRole(SD.Admin.ToString()) || User.IsInRole(SD.DepartmentHead.ToString()) || User.IsInRole(SD.Worker.ToString()))
+                    {
+                        <li>
+                            <a asp-controller="PurchaseOrders" asp-action="PurchaseOrderHome">
+                                <i class="metismenu-icon">
+                                </i> Giao dịch chi trả
+                            </a>
+                        </li>
+                    }
                 </ul>
             </li>
             <li>
@@ -235,21 +241,27 @@
                     <i class="metismenu-state-icon fas fa-angle-down caret-left"></i>
                 </a>
                 <ul>
-                    <li>
-                        <a asp-controller="Sale" asp-action="NewSale">
-                            <i class="metismenu-icon">
-                            </i> Create a new Sale
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Sale" asp-action="TransactionLookup">
-                            <i class="metismenu-icon">
-                            </i> Transaction Lookup
-                        </a>
-                    </li>
+                    @if (User.IsInRole(SD.Admin.ToString()) || User.IsInRole(SD.DepartmentHead.ToString()) || User.IsInRole(SD.Worker.ToString()))
+                    {
+                        <li>
+                            <a asp-controller="Sale" asp-action="NewSale">
+                                <i class="metismenu-icon">
+                                </i> Create a new Sale
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Sale" asp-action="TransactionLookup">
+                                <i class="metismenu-icon">
+                                </i> Transaction Lookup
+                            </a>
+                        </li>
+                    }
                 </ul>
             </li>
-            <li class="app-sidebar__heading">Khách hàng</li>
+        }
+        @if (User.IsInRole(SD.Admin.ToString()) || User.IsInRole(SD.DepartmentHead.ToString()))
+        {
+            <li class="app-sidebar__heading">Hệ thống Khách hàng</li>
             <li>
                 <a href="#">
                     <i class="metismenu-icon fas fa-rupee-sign"></i> Khách hàng
